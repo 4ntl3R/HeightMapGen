@@ -1,5 +1,8 @@
 {
   "dependencies": {
+	"jp.hadashikick.vcontainer": "https://github.com/hadashiA/VContainer.git?path=VContainer/Assets/VContainer#1.11.1",
+	"com.cysharp.unitask": "https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask",
+	"com.unity.2d.tilemap.extras": "https://github.com/Unity-Technologies/2d-extras.git#2020.3",
     "com.unity.2d.animation": "5.2.3",
     "com.unity.2d.pixel-perfect": "4.0.1",
     "com.unity.2d.psdimporter": "4.3.0",
