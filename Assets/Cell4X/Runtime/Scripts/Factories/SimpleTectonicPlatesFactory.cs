@@ -11,7 +11,7 @@ namespace Cell4X.Runtime.Scripts.Factories
     {
         private const float AdjacentDistance = 1f;
         private static readonly float DiagonalDistance = 1.4f; //Mathf.Sqrt(AdjacentDistance * 2);
-        private static readonly float EdgesPrecision = AdjacentDistance *2; 
+        private static readonly float EdgesPrecision = AdjacentDistance * 5; 
 
         private int[,] _result;
         private float[,] _distancesFromCenter;
