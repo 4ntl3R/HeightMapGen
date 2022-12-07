@@ -15,15 +15,16 @@ namespace Cell4X.Runtime.Scripts.Data
 
         private bool _isInitiated = false;
 
-        public T GetRandomValue()
+        public T GetRandomValue(System.Random randomizer = null)
         {
+            randomizer ??= new System.Random();
             if (!_isInitiated)
             {
                 Initiate();
                 _isInitiated = true;
             }
 
-            return valueAndRelativeFrequency[FindIndex(Random.value)].First;
+            return valueAndRelativeFrequency[FindIndex((float)randomizer.NextDouble())].First;
         }
 
         private void Initiate()

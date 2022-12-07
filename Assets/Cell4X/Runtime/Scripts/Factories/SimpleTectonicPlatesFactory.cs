@@ -4,6 +4,7 @@ using System.Linq;
 using Cell4X.Runtime.Scripts.Extensions;
 using Cell4X.Runtime.Scripts.Factories.Interfaces;
 using UnityEngine;
+using Random = System.Random;
 
 namespace Cell4X.Runtime.Scripts.Factories
 {
@@ -19,7 +20,14 @@ namespace Cell4X.Runtime.Scripts.Factories
         private Vector2Int _matrixLength;
         private Queue<Vector2Int> _currentIndexes;
 
-        
+        private Random _randomizer;
+
+
+        public void Inject(Random randomizer)
+        {
+            _randomizer = randomizer;
+        }
+
         public int[,] GenerateTectonicPlates(int fieldSize, int platesAmount)
         {
             _matrixLength = fieldSize.GetMatrixLengthBySize();
@@ -34,7 +42,6 @@ namespace Cell4X.Runtime.Scripts.Factories
                 var currentIndex = _currentIndexes.Dequeue();
                 NeighbourFilling(currentIndex, currentIndex.GetAdjacent(_matrixLength), AdjacentDistance);
                 NeighbourFilling(currentIndex, currentIndex.GetDiagonal(_matrixLength), DiagonalDistance);
-                Debug.Log(_currentIndexes.Count);
                 if (++stuckCount > _matrixLength.x*_matrixLength.y)
                 {
                     throw new StackOverflowException();
@@ -52,7 +59,7 @@ namespace Cell4X.Runtime.Scripts.Factories
                 
                 do
                 {
-                    randomIndex = _result.GenerateRandomIndexes();
+                    randomIndex = _result.GenerateRandomIndexes(_randomizer);
                     neighbours = new List<Vector2Int>();
                     neighbours.AddRange(randomIndex.GetAdjacent(_matrixLength));
                     neighbours.AddRange(randomIndex.GetDiagonal(_matrixLength));
@@ -109,32 +116,6 @@ namespace Cell4X.Runtime.Scripts.Factories
                     _distancesFromCenter[neighbourIndex.x, neighbourIndex.y] =
                         Mathf.Min(_distancesFromCenter[neighbourIndex.x, neighbourIndex.y], newDistanceFromCenter);
                 }
-            }
-        }
-
-        private void TestDebugShow()
-        {
-            Debug.Log("Distances start \n \n \n");
-            for (var i = _result.GetLength(1) - 1; i >= 0; i--)
-            {
-                var currentString = "";
-                for (var j = 0; j < _result.GetLength(0); j++)
-                {
-                    currentString += Mathf.RoundToInt(_distancesFromCenter[j, i] * 10) + " ";
-                }
-                Debug.Log(currentString);
-            }
-            
-            Debug.Log("\n \n \n Values start \n \n \n");
-            
-            for (var i = _result.GetLength(1) - 1; i >= 0; i--)
-            {
-                var currentString = "";
-                for (var j = 0; j < _result.GetLength(0); j++)
-                {
-                    currentString += _result[j, i] + " ";
-                }
-                Debug.Log(currentString);
             }
         }
     }

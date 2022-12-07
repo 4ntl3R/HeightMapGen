@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.UIElements;
 
 namespace Cell4X.Runtime.Scripts.Extensions
 {
@@ -8,10 +7,11 @@ namespace Cell4X.Runtime.Scripts.Extensions
         private const int XDimensionIndex = 0;
         private const int YDimensionIndex = 1;
 
-        public static Vector2Int GenerateRandomIndexes(this int[,] targetMatrix)
+        public static Vector2Int GenerateRandomIndexes(this int[,] targetMatrix, System.Random randomizer = null)
         {
-            var xIndex = Random.Range(0, targetMatrix.GetLength(XDimensionIndex));
-            var yIndex = Random.Range(0, targetMatrix.GetLength(YDimensionIndex));
+            randomizer ??= new System.Random();
+            var xIndex = randomizer.Next(0, targetMatrix.GetLength(XDimensionIndex));
+            var yIndex = randomizer.Next(0, targetMatrix.GetLength(YDimensionIndex));
 
             return new Vector2Int(xIndex, yIndex);
         }
@@ -22,9 +22,9 @@ namespace Cell4X.Runtime.Scripts.Extensions
             return new Vector2Int(value, value);
         }
         
-        public static int GetSizeByLength(this Vector2Int lenght)
+        public static int GetMatrixSizeByLength(this Vector2Int length)
         {
-            return lenght.IsLengthCorrect() ? Mathf.RoundToInt(Mathf.Log(lenght.x, 2)) : -1;
+            return length.IsLengthCorrect() ? Mathf.RoundToInt(Mathf.Log(length.x, 2)) : -1;
         }
 
         public static bool IsLengthCorrect(this Vector2Int size)
@@ -32,9 +32,10 @@ namespace Cell4X.Runtime.Scripts.Extensions
             return size.x == size.y && ((size.x - 1) & (size.x - 2)) == 0;
         }
 
-        public static T GetRandomElement<T>(this T[] array)
+        public static T GetRandomElement<T>(this T[] array, System.Random randomizer)
         {
-            return array[Random.Range(0, array.Length)];
+            randomizer ??= new System.Random();
+            return array[randomizer.Next(0, array.Length)];
         }
     }
 }
