@@ -30,6 +30,11 @@ namespace Cell4X.Runtime.Scripts.Extensions
 
             return result.FindAll(x => x.IsValid(arrayLength));
         }
+        
+        public static Vector2Int GetLoopedCoords(this Vector2Int value, Vector2Int max)
+        {
+            return new Vector2Int((value.x + max.x) % max.x, (value.y + max.y) % max.y);
+        }
 
         private static bool IsValid(this Vector2Int target, Vector2Int arrayLength)
         {
