@@ -10,9 +10,9 @@ namespace Cell4X.Runtime.Scripts.Factories
 {
     public class SimpleTectonicPlatesFactory : ITectonicPlatesFactory
     {
-        private const float AdjacentDistance = 1f;
-        private static readonly float DiagonalDistance = 1.4f; //Mathf.Sqrt(AdjacentDistance * 2);
-        private static readonly float EdgesPrecision = AdjacentDistance * 5; 
+        private const float AdjacentDistance = ArrayExtension.AdjacentDistance;
+        private const float EdgesPrecision = AdjacentDistance * 5;
+        private static readonly float DiagonalDistance = ArrayExtension.DiagonalDistance;
 
         private int[,] _result;
         private float[,] _distancesFromCenter;
@@ -21,8 +21,7 @@ namespace Cell4X.Runtime.Scripts.Factories
         private Queue<Vector2Int> _currentIndexes;
 
         private Random _randomizer;
-
-
+        
         public void Inject(Random randomizer)
         {
             _randomizer = randomizer;

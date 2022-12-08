@@ -4,8 +4,16 @@ namespace Cell4X.Runtime.Scripts.Extensions
 {
     public static class ArrayExtension
     {
+        public const float AdjacentDistance = 1f;
+        public static readonly float DiagonalDistance = 1.41f; //Mathf.Sqrt(AdjacentDistance * 2);
+        
         private const int XDimensionIndex = 0;
         private const int YDimensionIndex = 1;
+
+        public static Vector2Int GetMatrixSize<T>(this T[,] target)
+        {
+            return new Vector2Int(target.GetLength(XDimensionIndex), target.GetLength(YDimensionIndex));
+        }
 
         public static Vector2Int GenerateRandomIndexes(this int[,] targetMatrix, System.Random randomizer = null)
         {
