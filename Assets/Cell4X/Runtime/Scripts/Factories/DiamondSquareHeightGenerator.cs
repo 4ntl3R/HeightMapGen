@@ -46,8 +46,8 @@ namespace Cell4X.Runtime.Scripts.Factories
                         };
 
                         var average = coords.GetAverageInCells(_result);
-                        
-                        _result[x + halfSide, y + halfSide] = average + (float)_randomizer.NextDouble() * 2 * currentDelta - currentDelta;
+
+                        _result[x + halfSide, y + halfSide] = average + _randomizer.NextFloatInRange(currentDelta);
                     }
                 }
                 for (var x = 0; x < length * 2; x += sideLength) 
@@ -69,7 +69,7 @@ namespace Cell4X.Runtime.Scripts.Factories
 
                         var average = coords.GetAverageInCells(_result);
 
-                        _result[x + halfSide, y] = average  + (float)_randomizer.NextDouble() * 2 * currentDelta - currentDelta;
+                        _result[x + halfSide, y] = average + _randomizer.NextFloatInRange(currentDelta);
                     }
                 }
                 
