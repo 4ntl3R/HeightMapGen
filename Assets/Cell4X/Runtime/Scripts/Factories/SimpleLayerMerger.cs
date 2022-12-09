@@ -10,6 +10,8 @@ namespace Cell4X.Runtime.Scripts.Factories
     public class SimpleLayerMerger : IHeightsLayersMergeFactory
     {
         private static float MinLerp = 0.2f; 
+        private static float MaxLerp = 0.5f; 
+
         
         public int[,] MergeLayers(params float?[][,] layers)
         {
@@ -54,7 +56,8 @@ namespace Cell4X.Runtime.Scripts.Factories
             {
                 var max = Mathf.Abs(values[i]) > Mathf.Abs(current) ? values[i] : current;
                 var min = Mathf.Abs(values[i]) > Mathf.Abs(current) ? current : values[i];
-                current = Mathf.Lerp(max, min, Mathf.Max(MinLerp, Mathf.Abs(min)/Mathf.Abs(max)));
+                current = Mathf.Lerp(max, min, 
+                    Mathf.Min(MaxLerp, Mathf.Max(MinLerp, Mathf.Abs(min) + 1/Mathf.Abs(max) + 1)));
             }
 
             return current;
