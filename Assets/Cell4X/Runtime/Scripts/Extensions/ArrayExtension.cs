@@ -32,7 +32,7 @@ namespace Cell4X.Runtime.Scripts.Extensions
         
         public static int GetMatrixSizeByLength(this Vector2Int length)
         {
-            return length.IsLengthCorrect() ? Mathf.RoundToInt(Mathf.Log(length.x, 2)) : -1;
+             return length.IsLengthCorrect() ? Mathf.RoundToInt(Mathf.Log(length.x - 1, 2)) + 1 : -1;
         }
 
         public static bool IsLengthCorrect(this Vector2Int size)
