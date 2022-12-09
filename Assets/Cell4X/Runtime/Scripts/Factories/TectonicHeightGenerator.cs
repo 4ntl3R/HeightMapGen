@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Cell4X.Runtime.Scripts.Extensions;
@@ -10,9 +9,12 @@ namespace Cell4X.Runtime.Scripts.Factories
 {
     public class TectonicHeightGenerator
     {
-        private static readonly float DiagonalToAdjacentRatio = ArrayExtension.DiagonalDistance/ArrayExtension.AdjacentDistance; 
+        private static readonly float DiagonalToAdjacentRatio =   ArrayExtension.DiagonalDistance
+                                                                / ArrayExtension.AdjacentDistance; 
         
         private readonly Random _randomizer;
+        private float _randomAmplitude;
+        private float _randomRatio;
         
         private int[,] _platesMatrix;
         private float?[,] _result;
@@ -21,9 +23,11 @@ namespace Cell4X.Runtime.Scripts.Factories
 
         private Vector2Int _matrixSize;
 
-        public TectonicHeightGenerator(Random randomizer)
+        public TectonicHeightGenerator(Random randomizer, float randomAmplitude, float randomRatio)
         {
             _randomizer = randomizer;
+            _randomAmplitude = randomAmplitude;
+            _randomRatio = randomRatio;
         }
         
         public float?[,] GenerateHeightsFromPlates(int[,] platesMatrix, float decreaseOverRange, float[] edgeValues)
@@ -70,6 +74,7 @@ namespace Cell4X.Runtime.Scripts.Factories
 
             var stuckCounter = 0;
             var nextWave = new HashSet<Vector2Int>();
+            RandomizeByCoords(_edgesCoords, _randomAmplitude);
             while (cellQueue.Count > 0 || nextWave.Count > 0)
             {
                 if (cellQueue.Count == 0)
@@ -77,6 +82,7 @@ namespace Cell4X.Runtime.Scripts.Factories
                     cellQueue = new Queue<Vector2Int>(nextWave);
                     _edgesCoords.AddRange(nextWave);
                     nextWave = new HashSet<Vector2Int>();
+                    _randomAmplitude /= _randomRatio;
                 }
                 
                 var currentCoords = cellQueue.Dequeue();
@@ -135,6 +141,14 @@ namespace Cell4X.Runtime.Scripts.Factories
                 _result[neighbour.x, neighbour.y] /= affectedCells[neighbour.x, neighbour.y] - 1;
                 _result[neighbour.x, neighbour.y] += originValue;
                 _result[neighbour.x, neighbour.y] /= affectedCells[neighbour.x, neighbour.y];
+            }
+        }
+
+        private void RandomizeByCoords(List<Vector2Int> target, float randomMultiplier)
+        {
+            foreach (var coords in target)
+            {
+                _result[coords.x, coords.y] += _randomizer.NextFloatInRange(randomMultiplier);
             }
         }
     }
