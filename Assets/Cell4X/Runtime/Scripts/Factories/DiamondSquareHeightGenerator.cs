@@ -10,7 +10,7 @@ namespace Cell4X.Runtime.Scripts.Factories
     public class DiamondSquareHeightGenerator : ILandscapeHeightsFactory
     {
         private Random _randomizer;
-        private float[,] _result;
+        private float?[,] _result;
         private Vector2Int _matrixSize;
         private int _fillDistance;
         private int _presetDistance;
@@ -20,7 +20,7 @@ namespace Cell4X.Runtime.Scripts.Factories
             _randomizer = randomizer;
         }
 
-        public float[,] CreateLandscape(float[,] preset, float roughness, float decreaseOverTime, int size)
+        public float?[,] CreateLandscape(float[,] preset, float roughness, float decreaseOverTime, int size)
         {
             _matrixSize = size.GetMatrixLengthBySize();
             var length = _matrixSize.x;
@@ -101,7 +101,7 @@ namespace Cell4X.Runtime.Scripts.Factories
 
         private bool TryFillPreset(float[,] preset, int matrixSize)
         {
-            _result = new float[_matrixSize.x, _matrixSize.y];
+            _result = new float?[_matrixSize.x, _matrixSize.y];
             
             if (!preset.GetMatrixSize().IsLengthCorrect())
             {
