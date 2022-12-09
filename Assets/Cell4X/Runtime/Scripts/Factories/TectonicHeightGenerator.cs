@@ -81,8 +81,9 @@ namespace Cell4X.Runtime.Scripts.Factories
                 {
                     cellQueue = new Queue<Vector2Int>(nextWave);
                     _edgesCoords.AddRange(nextWave);
-                    nextWave = new HashSet<Vector2Int>();
                     _randomAmplitude /= _randomRatio;
+                    RandomizeByCoords(nextWave, _randomAmplitude);
+                    nextWave = new HashSet<Vector2Int>();
                 }
                 
                 var currentCoords = cellQueue.Dequeue();
@@ -144,7 +145,7 @@ namespace Cell4X.Runtime.Scripts.Factories
             }
         }
 
-        private void RandomizeByCoords(List<Vector2Int> target, float randomMultiplier)
+        private void RandomizeByCoords(IEnumerable<Vector2Int> target, float randomMultiplier)
         {
             foreach (var coords in target)
             {
