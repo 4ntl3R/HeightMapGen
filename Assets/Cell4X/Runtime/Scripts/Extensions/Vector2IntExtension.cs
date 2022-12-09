@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Cell4X.Runtime.Scripts.Extensions
@@ -36,7 +37,20 @@ namespace Cell4X.Runtime.Scripts.Extensions
             return new Vector2Int((value.x + max.x) % max.x, (value.y + max.y) % max.y);
         }
 
-        private static bool IsValid(this Vector2Int target, Vector2Int arrayLength)
+        public static float GetAverageInCells(this List<Vector2Int> coords, float[,] matrix)
+        {
+            return coords
+                .FindAll(x => x.IsValid(matrix))
+                .Select(coord => matrix[coord.x, coord.y])
+                .Average();
+        }
+        
+        public static bool IsValid<T>(this Vector2Int target, T[,] array)
+        {
+            return target.IsValid(array.GetMatrixSize());
+        }
+
+        public static bool IsValid(this Vector2Int target, Vector2Int arrayLength)
         {
             return (target.x >= 0) && (target.y >= 0) && (target.x < arrayLength.x) && (target.y < arrayLength.y);
         }
