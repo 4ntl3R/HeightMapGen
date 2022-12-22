@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Cell4X.Runtime.Scripts.Extensions
@@ -44,6 +46,38 @@ namespace Cell4X.Runtime.Scripts.Extensions
         {
             randomizer ??= new System.Random();
             return array[randomizer.Next(0, array.Length)];
+        }
+
+        public static int[,] SmoothArray(this int[,] target, int steps = 1)
+        {
+            var targetSize = target.GetMatrixSize(); 
+            var result = new int[targetSize.x, targetSize.y];
+            for (var x = 0; x < targetSize.x; x++)
+            {
+                for (var y = 0; y < targetSize.y; y++)
+                {
+                    var neighbours = new List<Vector2Int> { new Vector2Int(x, y) };
+                    for (var i = 0; i < steps; i++)
+                    {
+                        var thisWave = new List<Vector2Int>();
+                        foreach (var neighbour in neighbours)
+                        {
+                            thisWave.AddRange(neighbour.GetAdjacent(targetSize));
+                            thisWave.AddRange(neighbour.GetDiagonal(targetSize));
+                        }
+                        neighbours.AddRange(thisWave);
+                        neighbours = neighbours.Distinct().ToList();
+                    }
+
+                    result[x, y] =
+                        (Mathf.RoundToInt((float)neighbours
+                            .Select(coords => target[coords.x, coords.y])
+                            .Average()) 
+                         + target[x, y]) / 2;
+                }
+            }
+
+            return result;
         }
     }
 }
