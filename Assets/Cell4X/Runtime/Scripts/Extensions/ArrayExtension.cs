@@ -16,7 +16,7 @@ namespace Cell4X.Runtime.Scripts.Extensions
         {
             return new Vector2Int(target.GetLength(XDimensionIndex), target.GetLength(YDimensionIndex));
         }
-
+        
         public static Vector2Int GenerateRandomIndexes(this int[,] targetMatrix, System.Random randomizer = null)
         {
             randomizer ??= new System.Random();
@@ -34,7 +34,7 @@ namespace Cell4X.Runtime.Scripts.Extensions
         
         public static int GetMatrixSizeByLength(this Vector2Int length)
         {
-             return length.IsLengthCorrect() ? Mathf.RoundToInt(Mathf.Log(length.x - 1, 2)) + 1 : -1;
+             return length.IsLengthCorrect() ? Mathf.RoundToInt(Mathf.Log(length.x - 1, 2)) : -1;
         }
 
         public static bool IsLengthCorrect(this Vector2Int size)
@@ -52,32 +52,91 @@ namespace Cell4X.Runtime.Scripts.Extensions
         {
             var targetSize = target.GetMatrixSize(); 
             var result = new int[targetSize.x, targetSize.y];
+
             for (var x = 0; x < targetSize.x; x++)
             {
                 for (var y = 0; y < targetSize.y; y++)
                 {
-                    var neighbours = new List<Vector2Int> { new Vector2Int(x, y) };
-                    for (var i = 0; i < steps; i++)
-                    {
-                        var thisWave = new List<Vector2Int>();
-                        foreach (var neighbour in neighbours)
-                        {
-                            thisWave.AddRange(neighbour.GetAdjacent(targetSize));
-                            thisWave.AddRange(neighbour.GetDiagonal(targetSize));
-                        }
-                        neighbours.AddRange(thisWave);
-                        neighbours = neighbours.Distinct().ToList();
-                    }
+                    result[x, y] = target.SmoothCellValue(x, y, steps);
+                }
+            }
+            return result;
+        }
+        
+        public static float?[,] SmoothArray(this float?[,] target, int steps = 1)
+        {
+            var targetSize = target.GetMatrixSize(); 
+            var result = new float?[targetSize.x, targetSize.y];
 
-                    result[x, y] =
-                        (Mathf.RoundToInt((float)neighbours
-                            .Select(coords => target[coords.x, coords.y])
-                            .Average()) 
-                         + target[x, y]) / 2;
+            for (var x = 0; x < targetSize.x; x++)
+            {
+                for (var y = 0; y < targetSize.y; y++)
+                {
+                    result[x, y] = target.SmoothCellValue(x, y, steps);
+                }
+            }
+            return result;
+        }
+
+        public static (int, int, int, int) GetValidNeighbours<T>(this T[,] target, int cellX, int cellY, int range)
+        {
+            var matrixLength = target.GetMatrixSize();
+            
+            var xMin = Mathf.Max(cellX - range, 0);
+            var xMax = Mathf.Min(cellX + range, matrixLength.x - 1);
+            var yMin = Mathf.Max(cellY - range, 0);
+            var yMax = Mathf.Min(cellY + range, matrixLength.y - 1);
+
+            return (xMin, xMax, yMin, yMax);
+        }
+        
+        private static int SmoothCellValue(this int[,] target, int cellX, int cellY, int range)
+        {
+            var (xMin, xMax, yMin, yMax) = target.GetValidNeighbours(cellX, cellY, range);
+
+            var divider = 0f;
+            var sum = 0f;
+
+            for (var x = xMin; x < xMax + 1; x++)
+            {
+                for (var y = yMin; y < yMax + 1; y++)
+                {
+                    sum += target[x, y];
+                    divider++;
                 }
             }
 
-            return result;
+            return Mathf.RoundToInt(sum / divider);
         }
+        
+        private static float? SmoothCellValue(this float?[,] target, int cellX, int cellY, int range)
+        {
+            var (xMin, xMax, yMin, yMax) = target.GetValidNeighbours(cellX, cellY, range);
+
+            var divider = 0f;
+            var sum = 0f;
+
+            if (target[cellX, cellY] is null)
+            {
+                return null;
+            }
+
+            for (var x = xMin; x < xMax + 1; x++)
+            {
+                for (var y = yMin; y < yMax + 1; y++)
+                {
+                    if (target[x, y] is null)
+                    {
+                        continue;
+                    }
+                    sum += target[x, y].Value;
+                    divider++;
+                }
+            }
+
+            return sum / divider;
+        }
+        
+        
     }
 }
