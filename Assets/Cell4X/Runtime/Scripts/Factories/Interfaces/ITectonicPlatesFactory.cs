@@ -1,5 +1,3 @@
-using UnityEngine;
-
 namespace Cell4X.Runtime.Scripts.Factories.Interfaces
 {
     public interface ITectonicPlatesFactory
