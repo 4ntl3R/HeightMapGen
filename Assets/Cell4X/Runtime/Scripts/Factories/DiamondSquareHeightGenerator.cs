@@ -110,8 +110,8 @@ namespace Cell4X.Runtime.Scripts.Factories
 
             var presetSize = preset.GetMatrixSize().GetMatrixSizeByLength();
             
-            _fillDistance = 2 << (matrixSize - presetSize);
-            _presetDistance = Mathf.RoundToInt(Mathf.Pow(2, presetSize - 1));
+            _fillDistance = 2 << (matrixSize - presetSize - 1);
+            _presetDistance = Mathf.RoundToInt(Mathf.Pow(2, presetSize));
 
             var matrixLength = preset.GetMatrixSize();
 
