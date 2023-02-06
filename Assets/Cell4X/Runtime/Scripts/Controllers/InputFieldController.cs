@@ -1,19 +1,22 @@
 using System;
 using System.Collections.Generic;
-using Cell4X.Runtime.Scripts.Enums;
+using Cell4X.Runtime.Scripts.Extensions;
 using TMPro;
 using UnityEngine;
+using ParameterType = Cell4X.Runtime.Scripts.Enums.ParameterType;
 
 namespace Cell4X.Runtime.Scripts.Controllers
 {
     public class InputFieldController : MonoBehaviour
     {
-        public event Action<ParameterType, float> InputParameterUpdate;
+        public event Action<GenerationParameters> GenerationButtonPressed;
         
         [SerializeField] 
         private List<SerializablePair<ParameterType, TMP_InputField>> inputParameters;
 
         private Dictionary<ParameterType, TMP_InputField> _inputParametersDictionary;
+
+        private Dictionary<ParameterType, float> _currentParameterValues;
 
         private bool _isInitiated = false;
 
@@ -23,9 +26,25 @@ namespace Cell4X.Runtime.Scripts.Controllers
             
             var parameterType = (ParameterType)int.Parse(fieldIdentifier);
             var newValue = float.Parse(_inputParametersDictionary[parameterType].text);
-            
-            Debug.Log(parameterType);
-            InputParameterUpdate?.Invoke(parameterType, newValue);
+
+            if (_currentParameterValues.ContainsKey(parameterType))
+            {
+                _currentParameterValues.Add(parameterType, newValue);
+                return;
+            }
+
+            _currentParameterValues[parameterType] = newValue;
+        }
+
+        public void Generate()
+        {
+            if (_currentParameterValues.Count < inputParameters.Count)
+            {
+                return;
+            }
+
+            var parameters = new GenerationParameters(_currentParameterValues.ToSerializablePairs());
+            GenerationButtonPressed?.Invoke(parameters);
         }
 
         private void TryInitiate()
@@ -36,6 +55,7 @@ namespace Cell4X.Runtime.Scripts.Controllers
             }
             _isInitiated = true;
 
+            _currentParameterValues = new Dictionary<ParameterType, float>();
             _inputParametersDictionary = new Dictionary<ParameterType, TMP_InputField>();
             foreach (var inputParameter in inputParameters)
             {
