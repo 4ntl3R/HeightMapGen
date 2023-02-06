@@ -7,13 +7,19 @@ namespace Cell4X.Runtime.Scripts
     public class SerializablePair<T1, T2>
     {
         [SerializeField] 
-        private T1 _first;
+        private T1 first;
 
         [SerializeField] 
-        private T2 _second;
+        private T2 second;
         
-        public T1 First => _first;
+        public T1 First => first;
         
-        public T2 Second => _second;
+        public T2 Second => second;
+
+        public SerializablePair(T1 first, T2 second)
+        {
+            this.first = first;
+            this.second = second;
+        }
     }
 }
