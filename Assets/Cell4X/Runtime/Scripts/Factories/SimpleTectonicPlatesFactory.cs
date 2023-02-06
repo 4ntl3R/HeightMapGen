@@ -22,13 +22,10 @@ namespace Cell4X.Runtime.Scripts.Factories
 
         private Random _randomizer;
         
-        public void Inject(Random randomizer)
+
+        public int[,] GenerateTectonicPlates(Random randomizer, int fieldSize, int platesAmount)
         {
             _randomizer = randomizer;
-        }
-
-        public int[,] GenerateTectonicPlates(int fieldSize, int platesAmount)
-        {
             _matrixLength = fieldSize.GetMatrixLengthBySize();
             _result = new int[_matrixLength.x, _matrixLength.y];
             _distancesFromCenter = new float[_matrixLength.x, _matrixLength.y];

@@ -14,14 +14,10 @@ namespace Cell4X.Runtime.Scripts.Factories
         private Vector2Int _matrixSize;
         private int _fillDistance;
         private int _presetDistance;
-        
-        public void Inject(Random randomizer)
-        {
-            _randomizer = randomizer;
-        }
 
-        public float?[,] CreateLandscape(float[,] preset, float roughness, float decreaseOverTime, int size)
+        public float?[,] CreateLandscape(Random random, float[,] preset, float roughness, float decreaseOverTime, int size)
         {
+            _randomizer = random;
             _matrixSize = size.GetMatrixLengthBySize();
             var length = _matrixSize.x;
             if (!TryFillPreset(preset, size))

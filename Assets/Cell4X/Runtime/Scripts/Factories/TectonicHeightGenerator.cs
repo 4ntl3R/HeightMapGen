@@ -12,7 +12,7 @@ namespace Cell4X.Runtime.Scripts.Factories
         private static readonly float DiagonalToAdjacentRatio =   ArrayExtension.DiagonalDistance
                                                                 / ArrayExtension.AdjacentDistance; 
         
-        private readonly Random _randomizer;
+        private Random _randomizer;
         private float _randomAmplitude;
         private float _randomRatio;
         
@@ -22,16 +22,14 @@ namespace Cell4X.Runtime.Scripts.Factories
         private List<Vector2Int> _edgesCoords;
 
         private Vector2Int _matrixSize;
-
-        public TectonicHeightGenerator(Random randomizer, float randomAmplitude, float randomRatio)
+        
+        
+        public float?[,] GenerateHeightsFromPlates(Random randomizer, float randomAmplitude, float randomRatio, 
+            int[,] platesMatrix, float decreaseOverRange, float[] edgeValues)
         {
             _randomizer = randomizer;
             _randomAmplitude = randomAmplitude;
             _randomRatio = randomRatio;
-        }
-        
-        public float?[,] GenerateHeightsFromPlates(int[,] platesMatrix, float decreaseOverRange, float[] edgeValues)
-        {
             _platesMatrix = platesMatrix;
             _matrixSize = platesMatrix.GetMatrixSize();
             _result = new float?[_matrixSize.x, _matrixSize.y];
