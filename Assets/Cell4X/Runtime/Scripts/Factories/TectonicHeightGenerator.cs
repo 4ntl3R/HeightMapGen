@@ -22,8 +22,7 @@ namespace Cell4X.Runtime.Scripts.Factories
         private List<Vector2Int> _edgesCoords;
 
         private Vector2Int _matrixSize;
-        
-        
+
         public float?[,] GenerateHeightsFromPlates(Random randomizer, float randomAmplitude, float randomRatio, 
             int[,] platesMatrix, float decreaseOverRange, float[] edgeValues)
         {

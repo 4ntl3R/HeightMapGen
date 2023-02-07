@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Cell4X.Runtime.Scripts.Data;
 using Cell4X.Runtime.Scripts.Extensions;
 using Cell4X.Runtime.Scripts.Views.Interfaces;
 using UnityEngine;
@@ -8,20 +9,19 @@ namespace Cell4X.Runtime.Scripts.Views
 {
     public class GridTilemapView : IGridView
     {
-        private Tilemap _tilemap;
-        private Tile _baseTile;
-        private Dictionary<int, Color> _tileColors;
+        private readonly Tilemap _tilemap;
+        private readonly Tile _baseTile;
+        private readonly Dictionary<int, Color> _tileColors;
         
-        public GridTilemapView(Tilemap tilemap, Tile baseTile, Dictionary<int, Color> tileColors)
+        public GridTilemapView(Tilemap tilemap, Tile baseTile, HeightColorsData tileColors)
         {
             _tilemap = tilemap;
             _baseTile = baseTile;
-            _tileColors = tileColors;
+            _tileColors = tileColors.GetColorDictionary;
         }
         
         public void DrawGrid(int[,] grid)
         {
-            _tilemap.ClearAllTiles();
             var gridSize = grid.GetMatrixSize();
             for (var x = 0; x < gridSize.x; x++)
             {

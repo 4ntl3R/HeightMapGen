@@ -27,7 +27,7 @@ namespace Cell4X.Runtime.Scripts.Controllers
             var parameterType = (ParameterType)int.Parse(fieldIdentifier);
             var newValue = float.Parse(_inputParametersDictionary[parameterType].text);
 
-            if (_currentParameterValues.ContainsKey(parameterType))
+            if (!_currentParameterValues.ContainsKey(parameterType))
             {
                 _currentParameterValues.Add(parameterType, newValue);
                 return;
@@ -38,6 +38,7 @@ namespace Cell4X.Runtime.Scripts.Controllers
 
         public void Generate()
         {
+            TryInitiate();
             if (_currentParameterValues.Count < inputParameters.Count)
             {
                 return;
