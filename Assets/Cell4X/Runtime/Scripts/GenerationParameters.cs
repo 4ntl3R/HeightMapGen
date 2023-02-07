@@ -21,8 +21,9 @@ namespace Cell4X.Runtime.Scripts
 
         public GenerationParameters(List<SerializablePair<ParameterType, float>> parameters)
         {
-            Seed = FieldSize = MergeSmoothSteps = PlatesCount = PlatesDownscale = 0;
+            Seed = PlatesCount = MergeSmoothSteps = PlatesDownscale = 0;
             DecreaseOverRangePlates = PlatesRandomAmplitude = PlatesRandomRatio = RoughnessDS = DecreaseOverRangeDS = 0;
+            FieldSize = 6;
             
             foreach (var parameter in parameters)
             {
