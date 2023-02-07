@@ -12,6 +12,24 @@ namespace Cell4X.Runtime.Scripts.Extensions
         private const int XDimensionIndex = 0;
         private const int YDimensionIndex = 1;
 
+        public static int[,] TrimArray(this int[,] target, int minValue = -4, int maxValue = 4)
+        {
+            var targetSize = target.GetMatrixSize();
+            var result = new int[targetSize.x, targetSize.y];
+
+            for (var x = 0; x < targetSize.x; x++)
+            {
+                for (var y = 0; y < targetSize.y; y++)
+                {
+                    var lowerBorder = Mathf.Max(minValue, target[x, y]);
+                    var higherBorder = Mathf.Min(maxValue, target[x, y]);
+                    result[x, y] = lowerBorder > maxValue ? higherBorder : lowerBorder;
+                }
+            }
+
+            return result;
+        }
+
         public static Vector2Int GetMatrixSize<T>(this T[,] target)
         {
             return new Vector2Int(target.GetLength(XDimensionIndex), target.GetLength(YDimensionIndex));
